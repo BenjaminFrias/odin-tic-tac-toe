@@ -39,11 +39,10 @@ function Gameboard() {
             if (i % 3 == 0 && i > 0) {
                 formmatedBoard += "\n";
             }
-            formmatedBoard += ` ${marksArr[i]}`;
+            formmatedBoard += `${marksArr[i]}`;
         }
 
-        return formmatedBoard;
-
+        return { formmatedBoard, marksArr };
     };
 
     return { getBoard, addMark, getFormattedBoard };
@@ -80,6 +79,7 @@ function GameController(name1 = "Player1", name2 = "Player2") {
 
     const gameBoard = Gameboard();
     let activePlayer = players.player1;
+    let winner = false;
 
     const switchTurn = () => {
         activePlayer == players.player1
@@ -87,22 +87,115 @@ function GameController(name1 = "Player1", name2 = "Player2") {
             : (activePlayer = players.player1);
     };
 
-    const playRound = () => {
-        console.log(`${activePlayer.name}'s turn...`);
+    const playRounds = () => {
+        while (winner == false) {
+            console.log(`${activePlayer.name}'s turn...`);
 
-        let row = prompt("Select a row (0 - 2)");
-        let col = prompt("Select a column (0 - 2)");
+            let row;
+            let col;
+            do {
+                row = prompt("Select a row (0 - 2)");
+                col = prompt("Select a column (0 - 2)");
+            } while (!gameBoard.addMark(activePlayer.mark, row, col) || winner);
 
-        if (!gameBoard.addMark(activePlayer.mark, row, col)) {
+            console.log(gameBoard.getFormattedBoard().formmatedBoard);
+
+            let winnerResult = checkWinner();
+
+            if (winnerResult == "TIE") {
+                console.log("TIEEEEEEE");
+                winner = true;
+            } else if (winnerResult) {
+                console.log(activePlayer.name, "WINS");
+                winner = true;
+            } else if (winnerResult == 3) {
+                console.log("THERE IS A TIE");
+                winner = true;
+            }
+
+            switchTurn();
         }
-
-        console.log(gameBoard.getFormattedBoard());
-        switchTurn();
     };
 
-    return { playRound, switchTurn, players };
+    const checkWinner = () => {
+        const boardValues = gameBoard.getBoard();
+
+        // Check rows
+        for (let i = 0; i < 3; i++) {
+            // Loop every cell in the row
+            let firstCell = boardValues[i][0].getCellValue();
+            let secondCell = boardValues[i][1].getCellValue();
+            let thirdCell = boardValues[i][2].getCellValue();
+
+            if (
+                firstCell == secondCell &&
+                secondCell == thirdCell &&
+                firstCell != 0
+            ) {
+                return true;
+            }
+        }
+
+        // Check columns
+        for (let i = 0; i < 3; i++) {
+            let firstCell = boardValues[0][i].getCellValue();
+            let secondCell = boardValues[1][i].getCellValue();
+            let thirdCell = boardValues[2][i].getCellValue();
+
+            if (
+                firstCell == secondCell &&
+                secondCell == thirdCell &&
+                firstCell != 0
+            ) {
+                return true;
+            }
+        }
+
+        // Check diagonals
+        let middleCell = boardValues[1][1].getCellValue();
+
+        // First diagonal values
+        let upleftCell = boardValues[0][0].getCellValue();
+        let bottomRightCell = boardValues[2][2].getCellValue();
+
+        // Second diagonal values
+        let bottomLeftCell = boardValues[2][0].getCellValue();
+        let upRightCell = boardValues[0][2].getCellValue();
+
+        if (
+            upleftCell === middleCell &&
+            middleCell === bottomRightCell &&
+            middleCell != 0
+        ) {
+            return true;
+        }
+
+        if (
+            bottomLeftCell === middleCell &&
+            middleCell === upRightCell &&
+            middleCell != 0
+        ) {
+            return true;
+        }
+
+        // Check for ties
+        let zeros = 0;
+        for (let i = 0; i < 3; i++) {
+            // Loop every cell in the row
+            for (let j = 0; j < 3; j++) {
+                if (boardValues[i][j].getCellValue() == 0)
+                    boardValues[i][j].getCellValue() == 0 ? zeros++ : zeros;
+            }
+
+            if (i == 2 && zeros == 0) {
+                return "TIE";
+            }
+        }
+
+        return 0;
+    };
+
+    return { playRounds, switchTurn, players };
 }
 
 const game = GameController();
-game.playRound();
-game.playRound();
