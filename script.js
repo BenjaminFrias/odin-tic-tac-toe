@@ -87,34 +87,26 @@ function GameController(name1 = "Player1", name2 = "Player2") {
             : (activePlayer = players.player1);
     };
 
-    const playRounds = () => {
-        while (winner == false) {
-            console.log(`${activePlayer.name}'s turn...`);
+    const playRound = (row, col) => {
+        console.log(`${activePlayer.name}'s turn...`);
 
-            let row;
-            let col;
-            do {
-                row = prompt("Select a row (0 - 2)");
-                col = prompt("Select a column (0 - 2)");
-            } while (!gameBoard.addMark(activePlayer.mark, row, col) || winner);
-
-            console.log(gameBoard.getFormattedBoard().formmatedBoard);
-
-            let winnerResult = checkWinner();
-
-            if (winnerResult == "TIE") {
-                console.log("TIEEEEEEE");
-                winner = true;
-            } else if (winnerResult) {
-                console.log(activePlayer.name, "WINS");
-                winner = true;
-            } else if (winnerResult == 3) {
-                console.log("THERE IS A TIE");
-                winner = true;
-            }
-
-            switchTurn();
+        if (!gameBoard.addMark(activePlayer.mark, row, col) || winner) {
+            return;
         }
+
+        let winnerResult = checkWinner();
+        if (winnerResult == "TIE") {
+            console.log("TIEEEEEEE");
+            winner = true;
+        } else if (winnerResult) {
+            console.log(activePlayer.name, "WINS");
+            winner = true;
+        } else if (winnerResult == 3) {
+            console.log("THERE IS A TIE");
+            winner = true;
+        }
+
+        switchTurn();
     };
 
     const checkWinner = () => {
@@ -195,7 +187,36 @@ function GameController(name1 = "Player1", name2 = "Player2") {
         return 0;
     };
 
-    return { playRounds, switchTurn, players };
+    return { playRound, switchTurn, players, gameBoard };
 }
 
 const game = GameController();
+
+const container = document.querySelector(".container");
+const displayGame = {
+    markDivs: document.querySelectorAll(".tic-item"),
+    boardValues: game.gameBoard.getBoard(),
+    displayValues: function () {
+        this.boardValues.forEach((row, i) => {
+            row.forEach((item, j) => {
+                // Add content to buttons
+                this.markDivs[i * 3 + j].textContent =
+                    this.boardValues[i][j].getCellValue();
+            });
+        });
+    },
+    addDivsListeners: function () {
+        this.boardValues.forEach((row, i) => {
+            row.forEach((item, j) => {
+                // Add events listeners
+                this.markDivs[i * 3 + j].addEventListener("click", () => {
+                    game.playRound(i, j);
+                    displayGame.displayValues();
+                });
+            });
+        });
+    },
+};
+
+displayGame.displayValues();
+displayGame.addDivsListeners();
