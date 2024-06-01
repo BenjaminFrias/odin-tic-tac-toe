@@ -68,11 +68,11 @@ function GameController(name1 = "Player1", name2 = "Player2") {
     // Create players object
     const players = {
         player1: {
-            name: name1,
+            name: name1 || "Player1",
             mark: 1,
         },
         player2: {
-            name: name2,
+            name: name2 || "Player2",
             mark: 2,
         },
     };
@@ -205,41 +205,42 @@ startBtn.addEventListener("click", () => {
     startPage.classList.add("hidden");
 
     // Get players name
-    const player1 = document.querySelector("#player1-name");
-    const player2 = document.querySelector("#player2-name");
+    const player1 = document.querySelector("#player1-name").value.trim();
+    const player2 = document.querySelector("#player2-name").value.trim();
     
     const game = GameController(player1, player2);
-});
 
-const displayGame = {
-    markDivs: document.querySelectorAll(".tic-item"),
-    activePlayerText: document.querySelector(".active-player"),
-    boardValues: game.gameBoard.getBoard(),
-    displayCellValues: function () {
-        this.boardValues.forEach((row, i) => {
-            row.forEach((item, j) => {
-                this.markDivs[i * 3 + j].textContent =
-                    this.boardValues[i][j].getCellValue();
-            });
-        });
-    },
-    addDivsListeners: function () {
-        this.boardValues.forEach((row, i) => {
-            row.forEach((item, j) => {
-                this.markDivs[i * 3 + j].addEventListener("click", () => {
-                    game.playRound(i, j);
-                    displayGame.displayCellValues();
-                    displayGame.displayActivePlayer();
+    const displayGame = {
+        markDivs: document.querySelectorAll(".tic-item"),
+        activePlayerText: document.querySelector(".active-player"),
+        boardValues: game.gameBoard.getBoard(),
+        displayCellValues: function () {
+            this.boardValues.forEach((row, i) => {
+                row.forEach((item, j) => {
+                    this.markDivs[i * 3 + j].textContent =
+                        this.boardValues[i][j].getCellValue();
                 });
             });
-        });
-    },
-    displayActivePlayer: function () {
-        this.activePlayerText.textContent = game.getActivePlayer().name;
-    },
-};
+        },
+        addDivsListeners: function () {
+            this.boardValues.forEach((row, i) => {
+                row.forEach((item, j) => {
+                    this.markDivs[i * 3 + j].addEventListener("click", () => {
+                        game.playRound(i, j);
+                        displayGame.displayCellValues();
+                        displayGame.displayActivePlayer();
+                    });
+                });
+            });
+        },
+        displayActivePlayer: function () {
+            this.activePlayerText.textContent = game.getActivePlayer().name;
+        },
+    };
+    
+    
+    displayGame.displayCellValues();
+    displayGame.addDivsListeners();
+    displayGame.displayActivePlayer();
+});
 
-
-displayGame.displayCellValues();
-displayGame.addDivsListeners();
-displayGame.displayActivePlayer();
