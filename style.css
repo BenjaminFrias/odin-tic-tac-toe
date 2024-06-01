@@ -9,21 +9,38 @@
      background: rgb(250, 240, 240);
 }
 
-.tic-tac-toe-container {
+.game-page.displayed {
+    display: block;
+}
+
+.game-page {
+    display: none;
+}
+
+.items-container {
     margin:50px auto;
     width: 400px;
     height: 400px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    gap: 10px;
+    gap: 3px;
 }
 
-.tic-tac-toe-container .tic-item {
-    background: blue;
+.items-container .tic-item {
+    border: none;
+    border-radius: 5px;
+    background: #555555;
+
 }
 
-.tic-tac-toe-container .tic-item:hover {
+.items-container .tic-item:hover {
     scale: 1.1;
     
+}
+
+/* START PAGE */
+
+.start-page.hidden {
+    display: none;
 }

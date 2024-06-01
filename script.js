@@ -109,6 +109,7 @@ function GameController(name1 = "Player1", name2 = "Player2") {
         switchTurn();
     };
 
+    
     const checkWinner = () => {
         const boardValues = gameBoard.getBoard();
 
@@ -118,7 +119,7 @@ function GameController(name1 = "Player1", name2 = "Player2") {
             let firstCell = boardValues[i][0].getCellValue();
             let secondCell = boardValues[i][1].getCellValue();
             let thirdCell = boardValues[i][2].getCellValue();
-
+            
             if (
                 firstCell == secondCell &&
                 secondCell == thirdCell &&
@@ -127,13 +128,13 @@ function GameController(name1 = "Player1", name2 = "Player2") {
                 return true;
             }
         }
-
+        
         // Check columns
         for (let i = 0; i < 3; i++) {
             let firstCell = boardValues[0][i].getCellValue();
             let secondCell = boardValues[1][i].getCellValue();
             let thirdCell = boardValues[2][i].getCellValue();
-
+            
             if (
                 firstCell == secondCell &&
                 secondCell == thirdCell &&
@@ -145,15 +146,15 @@ function GameController(name1 = "Player1", name2 = "Player2") {
 
         // Check diagonals
         let middleCell = boardValues[1][1].getCellValue();
-
+        
         // First diagonal values
         let upleftCell = boardValues[0][0].getCellValue();
         let bottomRightCell = boardValues[2][2].getCellValue();
-
+        
         // Second diagonal values
         let bottomLeftCell = boardValues[2][0].getCellValue();
         let upRightCell = boardValues[0][2].getCellValue();
-
+        
         if (
             upleftCell === middleCell &&
             middleCell === bottomRightCell &&
@@ -161,7 +162,7 @@ function GameController(name1 = "Player1", name2 = "Player2") {
         ) {
             return true;
         }
-
+        
         if (
             bottomLeftCell === middleCell &&
             middleCell === upRightCell &&
@@ -169,7 +170,7 @@ function GameController(name1 = "Player1", name2 = "Player2") {
         ) {
             return true;
         }
-
+        
         // Check for ties
         let zeros = 0;
         for (let i = 0; i < 3; i++) {
@@ -178,28 +179,45 @@ function GameController(name1 = "Player1", name2 = "Player2") {
                 if (boardValues[i][j].getCellValue() == 0)
                     boardValues[i][j].getCellValue() == 0 ? zeros++ : zeros;
             }
-
+            
             if (i == 2 && zeros == 0) {
                 return "TIE";
             }
         }
-
+        
         return 0;
     };
+    
+    const getActivePlayer = () => {
+        return activePlayer;
+    }
 
-    return { playRound, switchTurn, players, gameBoard };
+    return { playRound, switchTurn, players, gameBoard, getActivePlayer };
 }
 
-const game = GameController();
 
-const container = document.querySelector(".container");
+const startBtn = document.querySelector(".start-btn");
+const startPage = document.querySelector(".start-page");
+const gameBoardDiv = document.querySelector(".game-page");
+
+startBtn.addEventListener("click", () => {
+    gameBoardDiv.classList.add("displayed");
+    startPage.classList.add("hidden");
+
+    // Get players name
+    const player1 = document.querySelector("#player1-name");
+    const player2 = document.querySelector("#player2-name");
+    
+    const game = GameController(player1, player2);
+});
+
 const displayGame = {
     markDivs: document.querySelectorAll(".tic-item"),
+    activePlayerText: document.querySelector(".active-player"),
     boardValues: game.gameBoard.getBoard(),
-    displayValues: function () {
+    displayCellValues: function () {
         this.boardValues.forEach((row, i) => {
             row.forEach((item, j) => {
-                // Add content to buttons
                 this.markDivs[i * 3 + j].textContent =
                     this.boardValues[i][j].getCellValue();
             });
@@ -208,15 +226,20 @@ const displayGame = {
     addDivsListeners: function () {
         this.boardValues.forEach((row, i) => {
             row.forEach((item, j) => {
-                // Add events listeners
                 this.markDivs[i * 3 + j].addEventListener("click", () => {
                     game.playRound(i, j);
-                    displayGame.displayValues();
+                    displayGame.displayCellValues();
+                    displayGame.displayActivePlayer();
                 });
             });
         });
     },
+    displayActivePlayer: function () {
+        this.activePlayerText.textContent = game.getActivePlayer().name;
+    },
 };
 
-displayGame.displayValues();
+
+displayGame.displayCellValues();
 displayGame.addDivsListeners();
+displayGame.displayActivePlayer();
