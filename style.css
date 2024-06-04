@@ -9,12 +9,12 @@
      background: rgb(250, 240, 240);
 }
 
-.game-page.displayed {
-    display: block;
+.game-page.hidden {
+    display: none;
 }
 
 .game-page {
-    display: none;
+    display: block;
 }
 
 .items-container {
@@ -43,4 +43,20 @@
 
 .start-page.hidden {
     display: none;
+}
+
+.start-page {
+    display: block;
+}
+
+/* RESULT PAGE */
+
+.results-page.hidden {
+    display: none;
+}
+
+.results-page {
+    display: block;
+    width: 100%;
+    min-height: 100%;
 }

@@ -65,6 +65,7 @@ function Cell() {
 
 // Control the flow of the game
 function GameController(name1 = "Player1", name2 = "Player2") {
+    console.log("GAME CONTROLLER CREATED");
     // Create players object
     const players = {
         player1: {
@@ -104,9 +105,9 @@ function GameController(name1 = "Player1", name2 = "Player2") {
         } else if (winnerResult == 3) {
             console.log("THERE IS A TIE");
             winner = true;
+        } else {
+            switchTurn();
         }
-
-        switchTurn();
     };
 
     const checkWinner = () => {
@@ -199,16 +200,33 @@ function GameController(name1 = "Player1", name2 = "Player2") {
         return gameBoard;
     };
 
-    return { playRound, switchTurn, getGameBoard, getActivePlayer, getWinner };
+    const resetWinner = () => {
+        winner = false;
+    }
+
+    return {
+        playRound,
+        switchTurn,
+        getGameBoard,
+        getActivePlayer,
+        getWinner,
+        resetWinner,
+    };
 }
 
 const startBtn = document.querySelector(".start-btn");
 const startPage = document.querySelector(".start-page");
 const gameBoardDiv = document.querySelector(".game-page");
+const resultsPage = document.querySelector(".results-page");
+const restartBtn = document.querySelector(".new-game-btn");
 
-startBtn.addEventListener("click", () => {
-    gameBoardDiv.classList.add("displayed");
-    startPage.classList.add("hidden");
+startBtn.addEventListener("click", startGame);
+
+restartBtn.addEventListener("click", restartGame);
+
+function startGame() {
+    gameBoardDiv.classList.toggle("hidden");
+    startPage.classList.toggle("hidden");
 
     // Get players name
     const player1 = document.querySelector("#player1-name").value.trim();
@@ -218,7 +236,8 @@ startBtn.addEventListener("click", () => {
 
     const displayGame = {
         markDivs: document.querySelectorAll(".tic-item"),
-        activePlayerText: document.querySelector(".active-player"),
+        activePlayerTitle: document.querySelector(".active-player"),
+        winnerText: document.querySelector(".results-page h2"),
         boardValues: game.getGameBoard().getBoard(),
         displayCellValues: function () {
             this.boardValues.forEach((row, i) => {
@@ -237,16 +256,35 @@ startBtn.addEventListener("click", () => {
                             displayGame.displayCellValues();
                             displayGame.displayActivePlayer();
                         }
+                        
+                        if (game.getWinner()) {
+                            console.log("WINNEEEEEEERRRR!!!!!!");
+                            this.displayResults();
+                            game.resetWinner();
+                        }
                     });
                 });
             });
         },
         displayActivePlayer: function () {
-            this.activePlayerText.textContent = game.getActivePlayer().name;
+            this.activePlayerTitle.textContent = `${
+                game.getActivePlayer().name
+            } turn...`;
+        },
+        displayResults: function () {
+            gameBoardDiv.classList.toggle("hidden");
+            resultsPage.classList.remove("hidden");
+
+            this.winnerText.textContent = `${game.getActivePlayer().name} WINS`;
         },
     };
 
     displayGame.displayCellValues();
     displayGame.addDivsListeners();
     displayGame.displayActivePlayer();
-});
+}
+
+function restartGame() {
+    startPage.classList.remove("hidden");
+    resultsPage.classList.add("hidden");
+}
