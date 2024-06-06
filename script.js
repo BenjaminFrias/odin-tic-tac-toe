@@ -87,10 +87,10 @@ function GameController(name1 = "Player1", name2 = "Player2") {
         let winnerResult = checkWinner();
         if (winnerResult == "TIE") {
             tie = true;
-            winner = true;
+            winner = "TIE";
         } else if (winnerResult) {
             console.log(activePlayer.name, "WINS");
-            winner = true;
+            winner = 1;
         } else {
             switchTurn();
         }
@@ -233,6 +233,8 @@ function startGame() {
         activePlayerTitle: document.querySelector(".active-player"),
         winnerText: document.querySelector(".results-page h2"),
         boardValues: game.getGameBoard().getBoard(),
+        result: game.getWinner(),
+        resultImage: document.querySelector(".results-page .winner-icon img"),
         displayCellValues: function () {
             this.boardValues.forEach((row, i) => {
                 row.forEach((item, j) => {
@@ -278,7 +280,7 @@ function startGame() {
                         }
 
                         if (game.getWinner()) {
-                            this.displayResults();
+                            this.displayResults(game.getWinner());
                             game.resetGame();
                         }
                     });
@@ -290,10 +292,19 @@ function startGame() {
                 game.getActivePlayer().name
             } turn...`;
         },
-        displayResults: function () {
+        displayResults: function (winner) {
             gameBoardDiv.classList.add("hidden");
             resultsPage.classList.remove("hidden");
-            this.winnerText.textContent = `${game.getActivePlayer().name} WINS`;
+
+            if (winner == "TIE") {
+                this.winnerText.textContent = `TIE!`;
+                this.resultImage.setAttribute("src", "tie.png");
+            } else {
+                this.winnerText.textContent = `${
+                    game.getActivePlayer().name
+                } WINS`;
+                this.resultImage.setAttribute("src", "winnerIcon.png");
+            }
         },
     };
 

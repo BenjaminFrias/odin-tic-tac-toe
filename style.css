@@ -189,7 +189,7 @@ svg.circle-icon {
 }
 
 .winner-icon {
-    width: 30%;
+    width: 200px;
 }
 
 @media (max-width: 750px) {
@@ -200,7 +200,7 @@ svg.circle-icon {
 
 .winner-icon img {
     width: 100%;
-    background-size: cover;
+    background-size:cover;
     background-position: right;
 }
 
