@@ -20,7 +20,7 @@
     background: var(--bg-color);
     display: flex;
     flex-direction: column;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 /* HEADER */

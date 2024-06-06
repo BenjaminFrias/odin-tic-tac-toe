@@ -1,5 +1,6 @@
 // Control the state of the board
 function Gameboard() {
+    console.log("GAMEBOARD");
     const rows = 3;
     const columns = 3;
     const board = [];
@@ -22,30 +23,19 @@ function Gameboard() {
         return cell;
     };
 
+    const resetBoard = function () {
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < columns; j++) {
+                board[i][j].changeCellValue(0);
+            }
+        }
+    };
+
     const getBoard = () => {
         return board;
     };
 
-    const getFormattedBoard = () => {
-        let marksArr = [];
-        let formmatedBoard = "";
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                marksArr.push(board[i][j].getCellValue());
-            }
-        }
-
-        for (let i = 0; i < 9; i++) {
-            if (i % 3 == 0 && i > 0) {
-                formmatedBoard += "\n";
-            }
-            formmatedBoard += `${marksArr[i]}`;
-        }
-
-        return { formmatedBoard, marksArr };
-    };
-
-    return { getBoard, addMark, getFormattedBoard };
+    return { getBoard, addMark, resetBoard };
 }
 
 // Individual cell from the board
@@ -198,8 +188,10 @@ function GameController(name1 = "Player1", name2 = "Player2") {
         return gameBoard;
     };
 
-    const resetWinner = () => {
+    const resetGame = () => {
         winner = false;
+
+        gameBoard.resetBoard();
     };
 
     const isTie = () => {
@@ -212,7 +204,7 @@ function GameController(name1 = "Player1", name2 = "Player2") {
         getGameBoard,
         getActivePlayer,
         getWinner,
-        resetWinner,
+        resetGame,
         isTie,
     };
 }
@@ -227,14 +219,14 @@ startBtn.addEventListener("click", startGame);
 restartBtn.addEventListener("click", restartGame);
 
 function startGame() {
-    gameBoardDiv.classList.toggle("hidden");
-    startPage.classList.toggle("hidden");
+    gameBoardDiv.classList.remove("hidden");
+    startPage.classList.add("hidden");
 
     // Get players name
     const player1 = document.querySelector("#player1-name").value.trim();
     const player2 = document.querySelector("#player2-name").value.trim();
 
-    const game = GameController(player1, player2);
+    let game = GameController(player1, player2);
 
     const displayGame = {
         markDivs: document.querySelectorAll(".tic-item"),
@@ -244,6 +236,8 @@ function startGame() {
         displayCellValues: function () {
             this.boardValues.forEach((row, i) => {
                 row.forEach((item, j) => {
+                    // restart divs
+                    this.markDivs[i * 3 + j].innerHTML = "";
 
                     // Add event listeners
                     this.markDivs[i * 3 + j].addEventListener("click", () => {
@@ -276,14 +270,16 @@ function startGame() {
                             }
 
                             cellDiv.innerHTML = value;
-                            cellDiv.querySelector("svg").classList.add("placed");
+                            cellDiv
+                                .querySelector("svg")
+                                .classList.add("placed");
 
                             displayGame.displayActivePlayer();
                         }
 
                         if (game.getWinner()) {
                             this.displayResults();
-                            game.resetWinner();
+                            game.resetGame();
                         }
                     });
                 });
@@ -295,9 +291,8 @@ function startGame() {
             } turn...`;
         },
         displayResults: function () {
-            gameBoardDiv.classList.toggle("hidden");
+            gameBoardDiv.classList.add("hidden");
             resultsPage.classList.remove("hidden");
-
             this.winnerText.textContent = `${game.getActivePlayer().name} WINS`;
         },
     };
@@ -309,4 +304,5 @@ function startGame() {
 function restartGame() {
     startPage.classList.remove("hidden");
     resultsPage.classList.add("hidden");
+    gameBoardDiv.classList.add("hidden");
 }
