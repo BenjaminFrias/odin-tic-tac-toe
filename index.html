@@ -4,20 +4,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>Tic Tac Toe</title>
 </head>
 
 <body>
     <div class="container">
-        <h1>Tic Tac Toe</h1>
+        <header>
+            <?xml version="1.0" ?><svg class="x-icon" fill="none" height="24" stroke="currentColor"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"
+                xmlns="http://www.w3.org/2000/svg">
+                <line x1="18" x2="6" y1="6" y2="18" />
+                <line x1="6" x2="18" y1="6" y2="18" />
+            </svg>
+
+            <h1>TIC TAC TOE</h1>
+
+            <?xml version="1.0" ?><svg class="circle-icon" fill="none" height="24" stroke="currentColor"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+        </header>
 
         <div class="start-page">
-            <input type="text" id="player1-name" placeholder="Player 1 Name">
-            <input type="text" id="player2-name" placeholder="Player 2 Name">
-            <button class="start-btn">Start</button>
+
+            <div class="player-input">
+                <?xml version="1.0" ?><svg class="x-icon" fill="none" height="24" stroke="currentColor"
+                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <line x1="18" x2="6" y1="6" y2="18" />
+                    <line x1="6" x2="18" y1="6" y2="18" />
+                </svg>
+                <input type="text" id="player1-name" placeholder="Player 1 Name">
+            </div>
+
+            <div class="player-input">
+                <?xml version="1.0" ?><svg class="circle-icon" fill="none" height="24" stroke="currentColor"
+                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" />
+                </svg>
+                <input type="text" id="player2-name" placeholder="Player 2 Name">
+            </div>
+
+            <button class="start-btn">Start Game</button>
+
         </div>
-        
+
         <div class="game-page hidden">
             <h2 class="active-player"></h2>
             <div class="items-container">

@@ -81,6 +81,7 @@ function GameController(name1 = "Player1", name2 = "Player2") {
     const gameBoard = Gameboard();
     let activePlayer = players.player1;
     let winner = false;
+    let tie = false;
 
     const switchTurn = () => {
         activePlayer == players.player1
@@ -97,13 +98,10 @@ function GameController(name1 = "Player1", name2 = "Player2") {
 
         let winnerResult = checkWinner();
         if (winnerResult == "TIE") {
-            console.log("TIEEEEEEE");
+            tie = true;
             winner = true;
         } else if (winnerResult) {
             console.log(activePlayer.name, "WINS");
-            winner = true;
-        } else if (winnerResult == 3) {
-            console.log("THERE IS A TIE");
             winner = true;
         } else {
             switchTurn();
@@ -202,7 +200,11 @@ function GameController(name1 = "Player1", name2 = "Player2") {
 
     const resetWinner = () => {
         winner = false;
-    }
+    };
+
+    const isTie = () => {
+        return tie;
+    };
 
     return {
         playRound,
@@ -211,6 +213,7 @@ function GameController(name1 = "Player1", name2 = "Player2") {
         getActivePlayer,
         getWinner,
         resetWinner,
+        isTie,
     };
 }
 
@@ -221,7 +224,6 @@ const resultsPage = document.querySelector(".results-page");
 const restartBtn = document.querySelector(".new-game-btn");
 
 startBtn.addEventListener("click", startGame);
-
 restartBtn.addEventListener("click", restartGame);
 
 function startGame() {
@@ -242,23 +244,44 @@ function startGame() {
         displayCellValues: function () {
             this.boardValues.forEach((row, i) => {
                 row.forEach((item, j) => {
-                    this.markDivs[i * 3 + j].textContent =
-                        this.boardValues[i][j].getCellValue();
-                });
-            });
-        },
-        addDivsListeners: function () {
-            this.boardValues.forEach((row, i) => {
-                row.forEach((item, j) => {
+
+                    // Add event listeners
                     this.markDivs[i * 3 + j].addEventListener("click", () => {
+                        // when clicked, if not winner play round
                         if (!game.getWinner()) {
                             game.playRound(i, j);
-                            displayGame.displayCellValues();
+
+                            // Show value of the cell when clicked
+                            let cellDiv = this.markDivs[i * 3 + j];
+                            let value = this.boardValues[i][j].getCellValue();
+                            if (value == 1) {
+                                value = `
+                                        <svg class="x-icon mark-icon" fill="none" height="24" stroke="currentColor"
+                                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <line x1="18" x2="6" y1="6" y2="18" />
+                                            <line x1="6" x2="18" y1="6" y2="18" />
+                                        </svg>
+                                        `;
+                            } else if (value == 2) {
+                                value = `
+                                            <svg class="circle-icon mark-icon" fill="none" height="24" stroke="currentColor"
+                                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="12" cy="12" r="10" />
+                                            </svg>
+                                            `;
+                            } else {
+                                value = "";
+                            }
+
+                            cellDiv.innerHTML = value;
+                            cellDiv.querySelector("svg").classList.add("placed");
+
                             displayGame.displayActivePlayer();
                         }
-                        
+
                         if (game.getWinner()) {
-                            console.log("WINNEEEEEEERRRR!!!!!!");
                             this.displayResults();
                             game.resetWinner();
                         }
@@ -280,7 +303,6 @@ function startGame() {
     };
 
     displayGame.displayCellValues();
-    displayGame.addDivsListeners();
     displayGame.displayActivePlayer();
 }
 

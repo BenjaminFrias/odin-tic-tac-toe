@@ -1,42 +1,57 @@
+/* GENERAL */
+
+:root {
+    --bg-color: #f8f8f8;
+    --lines-color: #ebecec;
+    --blue-color: #397cf3;
+    --orange-color: #f87b35;
+    --title-color: #39314d;
+}
+
 * {
     margin: 0;
     padding: 0;
+    font-family: "Inter", Arial, Helvetica, sans-serif;
 }
 
 .container {
-     width: 100%;
-     min-height: 100vh;
-     background: rgb(250, 240, 240);
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
 }
 
-.game-page.hidden {
-    display: none;
+/* HEADER */
+
+header {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
 }
 
-.game-page {
-    display: block;
+header h1 {
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 900;
+    color: var(--title-color);
 }
 
-.items-container {
-    margin:50px auto;
-    width: 400px;
-    height: 400px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    gap: 3px;
+header svg {
+    height: 30%;
 }
 
-.items-container .tic-item {
-    border: none;
-    border-radius: 5px;
-    background: #555555;
+/* ICONS */
 
+svg.x-icon {
+    color: var(--blue-color);
 }
 
-.items-container .tic-item:hover {
-    scale: 1.1;
-    
+svg.circle-icon {
+    color: var(--orange-color);
 }
 
 /* START PAGE */
@@ -46,7 +61,108 @@
 }
 
 .start-page {
-    display: block;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 100px 0;
+}
+
+.start-page .player-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    height: 100px;
+}
+
+.start-page .player-input input {
+    outline: 0px;
+    border: none;
+    border-radius: 10px;
+    background: var(--lines-color);
+    height: 60px;
+    padding: 0px 10px;
+    font-weight: 600;
+}
+
+.start-page .start-btn {
+    outline: 0px;
+    border: none;
+    border-radius: 10px;
+    height: 50px;
+    width: 30%;
+    margin-top: 20px;
+    background: var(--title-color);
+    color: var(--bg-color);
+    font-weight: 600;
+    transition: all 200ms ease;
+}
+
+.start-btn:hover {
+    transition: all 200ms ease;
+    background: var(--bg-color);
+    color: var(--title-color);
+    border: 1px solid var(--title-color);
+}
+
+/* GAMEPAGE */
+
+.game-page.hidden {
+    display: none;
+}
+
+.game-page {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    margin: auto auto;
+}
+
+.game-page h2 {
+    font-size: clamp(1.3rem, 5vw, 2rem);
+}
+
+.items-container {
+    width: 400px;
+    height: 400px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 3px;
+    background: #c7c7c7;
+}
+
+.items-container .tic-item {
+    border: 2px solid var(--lines-color);
+    background: var(--lines-color);
+    transition: all 200ms ease;
+}
+
+.items-container .tic-item:hover {
+    background: #d4d4d4;
+    scale: 1.08;
+    transition: all 200ms ease;
+}
+
+/* MARK ICON */
+
+
+.mark-icon.placed {
+    animation: scale 200ms;
+    scale: 2.5;
+}
+
+@keyframes scale {
+    0% {
+        scale: 25;
+    }
+    100% {
+        scale: 2.5;
+    }
 }
 
 /* RESULT PAGE */
