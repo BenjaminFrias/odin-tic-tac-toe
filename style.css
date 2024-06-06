@@ -16,7 +16,7 @@
 
 .container {
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
     background: var(--bg-color);
     display: flex;
     flex-direction: column;
@@ -136,6 +136,13 @@ svg.circle-icon {
     background: #c7c7c7;
 }
 
+@media (max-width: 750px) {
+    .items-container{
+        width: 300px;
+        height: 300px;
+    }
+}
+
 .items-container .tic-item {
     border: 2px solid var(--lines-color);
     background: var(--lines-color);
@@ -172,7 +179,55 @@ svg.circle-icon {
 }
 
 .results-page {
-    display: block;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    min-height: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.winner-icon {
+    width: 30%;
+}
+
+@media (max-width: 750px) {
+    .winner-icon {
+        width: 50%;
+    }
+}
+
+.winner-icon img {
+    width: 100%;
+    background-size: cover;
+    background-position: right;
+}
+
+.results-page h2 {
+    margin: 0 auto;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--title-color);
+}
+
+.results-page button {
+    outline: 0px;
+    border: none;
+    border-radius: 10px;
+    height: 50px;
+    width: 30%;
+    margin-top: 20px;
+    background: var(--title-color);
+    color: var(--bg-color);
+    font-weight: 600;
+    transition: all 200ms ease;
+}
+
+.results-page button:hover {
+    transition: all 200ms ease;
+    background: var(--bg-color);
+    color: var(--title-color);
+    border: 1px solid var(--title-color);
 }

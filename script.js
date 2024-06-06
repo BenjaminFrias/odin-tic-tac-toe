@@ -1,6 +1,5 @@
 // Control the state of the board
 function Gameboard() {
-    console.log("GAMEBOARD");
     const rows = 3;
     const columns = 3;
     const board = [];
@@ -55,7 +54,6 @@ function Cell() {
 
 // Control the flow of the game
 function GameController(name1 = "Player1", name2 = "Player2") {
-    console.log("GAME CONTROLLER CREATED");
     // Create players object
     const players = {
         player1: {
@@ -214,6 +212,8 @@ const startPage = document.querySelector(".start-page");
 const gameBoardDiv = document.querySelector(".game-page");
 const resultsPage = document.querySelector(".results-page");
 const restartBtn = document.querySelector(".new-game-btn");
+const inputP1 = document.querySelector("#player1-name");
+const inputP2 = document.querySelector("#player2-name");
 
 startBtn.addEventListener("click", startGame);
 restartBtn.addEventListener("click", restartGame);
@@ -223,8 +223,8 @@ function startGame() {
     startPage.classList.add("hidden");
 
     // Get players name
-    const player1 = document.querySelector("#player1-name").value.trim();
-    const player2 = document.querySelector("#player2-name").value.trim();
+    const player1 = inputP1.value.trim();
+    const player2 = inputP2.value.trim();
 
     let game = GameController(player1, player2);
 
@@ -305,4 +305,7 @@ function restartGame() {
     startPage.classList.remove("hidden");
     resultsPage.classList.add("hidden");
     gameBoardDiv.classList.add("hidden");
+
+    inputP1.value = "";
+    inputP2.value = "";
 }
